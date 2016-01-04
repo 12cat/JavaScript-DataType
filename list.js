@@ -103,19 +103,3 @@ function find(e) {
     }
     return -1;
 }
-
-var n = new List();
-n.append('cat1');
-n.append('cat2');
-n.append('cat3');
-console.log(n.listSize);
-console.log(n.currPos());
-console.log(n.toString());
-n.front();
-console.log(n.currPos());
-n.next();
-n.next();
-n.next();
-console.log(n.currPos());
-n.prev();
-console.log(n.currPos());
