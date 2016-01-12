@@ -26,6 +26,9 @@ function Graph(v) {
 
     this.pathTo = pathTo;
     this.pathToRun = pathToRun;
+
+    this.topSort = topSort;
+    this.topSortHelper = topSortHelper;
 }
 
 function addVertice(v) {
@@ -94,7 +97,7 @@ function rangeRun(v, arr1, arr2) {        // 回调函数
 function pathTo(v1, v2) {
     var arr1 = [this.vertices[0]],  // 查询列表
         arr2 = {},                  // 已查询列表
-        str = v1+ ' 到 ' +v2+ '的最短路径：',
+        str = v1+ ' 到 ' +v2+ ' 的最短路径：',
         v = v2;
     this.pathToRun(0, [v1, v2], arr1, arr2);
     console.log(arr2)
@@ -124,6 +127,31 @@ function pathToRun(n, arr, arr1, arr2) {
     if (n+1 < arr1.length) {
         this.pathToRun(n+1, arr, arr1, arr2);
     }
+}
+
+// 拓扑排序
+// ## 这个方法有问题
+function topSort() {
+    var stack = [],
+        visited = [];
+        for (var i=0; i<this.vertices.length; i++) {
+            visited[this.vertices[i]] = false;
+        }
+        for (var i=0; i<this.vertices.length; i++) {
+            if (visited[this.vertices[i]] == false) {
+                this.topSortHelper(this.vertices[i], visited, stack);
+            }
+        }
+        console.log(stack);
+}
+function topSortHelper(v, visited, stack) {
+    visited[v] = true;
+    for (var i=0; i<this.adj[v].length; i++) {
+        if (!visited[this.adj[v][i]]) {
+            this.topSortHelper(this.adj[v][i], visited, stack);
+        }
+    }
+    stack.push(v);
 }
 
 
@@ -158,3 +186,5 @@ console.log(g);
 g.depth();
 g.range();
 g.pathTo('C', 'E');
+
+g.topSort();
