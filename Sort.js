@@ -14,9 +14,14 @@ function CArray(num) {
     this.setData = setData;
 
     this.swap = swap;
+
     this.bubbleSort = bubbleSort;
     this.selectionSort = selectionSort;
     this.insertionSort = insertionSort;
+
+    this.shellSort = shellSort;
+    this.mergeSort = mergeSort;
+    this.quickSort = quickSort;
 }
 
 function setData() {
@@ -96,13 +101,79 @@ function insertionSort() {
     }
 }
 
+// 动态希尔排序
+function shellSort() {
+    console.log("shellSort:");
+    var len = this.dataStore.length;
+    for (var fra=Math.floor(len/2); fra>0; fra=Math.floor(fra/2)) {
+        for (var i=fra; i<len; i++){
+            for(var j=i-fra; j>=0&&this.dataStore[j]>this.dataStore[fra+j]; j-=fra){
+                swap(this.dataStore, j, fra+j)
+            }
+        }
+    }
+}
+
+// 并归排序
+function merge(left, right) {
+    var result = [];
+    while (left.length>0 && right.length>0) {
+        if (left[0]<right[0]) {
+            result.push(left.shift());
+        } else {
+            result.push(right.shift());
+        }
+    }
+    return result.concat(left).concat(right);
+}
+function mSort(items) {
+
+    if (items.length == 1) {
+        return items;
+    }
+    var middle = Math.floor(items.length/2),
+        left = items.slice(0, middle),
+        right = items.slice(middle);
+    return merge(mSort(left), mSort(right));
+}
+function mergeSort() {
+    console.log("mergeSort:");
+    this.dataStore = mSort(this.dataStore);
+}
+
+// 快速排序
+function quickSort() {
+    console.log("quickSort:");
+    this.dataStore = qSort(this.dataStore);
+}
+function qSort(arr) {
+    if (arr.length == 0) {
+        return [];
+    }
+    var left = [],
+        right = [],
+        pivot = arr[0];     // 基准值
+    for (var i=1; i<arr.length; i++) {
+        if (arr[i] < pivot) {
+            left.push(arr[i]);
+        } else {
+            right.push(arr[i]);
+        }
+    }
+    return qSort(left).concat(pivot, qSort(right));
+}
+
 
 var arr = new CArray(10);
 arr.setData();
+arr.show();
 
-arr.selectionSort();
+//arr.selectionSort();
 //arr.insertionSort();
 //arr.bubbleSort();
+//arr.shellSort();
+//arr.mergeSort();
+arr.quickSort();
 arr.show();
 
 // var start = new Date().getTime();
